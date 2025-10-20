@@ -4,6 +4,6 @@
 
 * Project init.
 
-## 0.0.11
+## 0.0.2
 
 * Fix bug, change some code for more readable.
