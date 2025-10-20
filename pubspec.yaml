@@ -1,5 +1,6 @@
 name: flutterx_starter_kit
-description: "A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices."
+description: "A comprehensive starter kit to accelerate Flutter application
+  development with ready-to-use components following best practices."
 version: 0.0.2
 homepage: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
 repository: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
@@ -11,13 +12,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  get: ^4.7.2
   http: ^1.5.0
 
 dev_dependencies:
-  test: ^1.25.0
-  http_mock_adapter: ^0.6.1
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  http_mock_adapter: ^0.6.1
+  test: ^1.25.0
 
 flutter: null
