@@ -1,7 +1,6 @@
 # FlutterX Starter Kit
 
 [![pub package](https://img.shields.io/pub/v/flutterx_starter_kit.svg)](https://pub.dev/packages/flutterx_starter_kit)
-[![popularity](https://img.shields.io/pub/popularity/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
 [![likes](https://img.shields.io/pub/likes/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
 [![pub points](https://img.shields.io/pub/points/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
 
@@ -11,22 +10,12 @@ A comprehensive starter kit to accelerate Flutter application development with r
 
 ### ✅ Currently Available
 
-- 🌐 **ApiClient** - Powerful HTTP client with complete features:
-  - Singleton pattern for easy global access
-  - Support for all HTTP methods (GET, POST, PUT, PATCH, DELETE)
-  - Auto token management & refresh token mechanism
-  - Custom headers per request or globally
-  - Query parameters support
-  - Automatic JSON encoding/decoding
-  - Built-in error handling & custom exceptions
-  - Timeout configuration
-  - Environment-based base URL
+- 🌐 **ApiClient** - Powerful HTTP client with complete features
 
 ### 🚧 Coming Soon
 
 - 🎨 **UI Components** - Widget library (Button, Card, Input, etc.)
 - 📱 **Responsive Utils** - Helper for responsive design
-- 🔐 **Auth Helper** - Authentication utilities
 - 📊 **Logger** - Advanced logging system
 
 ## Installation
@@ -35,7 +24,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutterx_starter_kit: ^0.0.1
+  flutterx_starter_kit: <latest-version>
 ```
 
 Or install via command line:
@@ -59,10 +48,10 @@ void main() {
   ApiClient.init(ApiConfig(
     baseUrl: const String.fromEnvironment(
       'API_BASE_URL',
+      // If API_BASE_URL not setup in env
       defaultValue: 'http://10.0.2.2:8080',
     ),
   ));
-  
   runApp(MyApp());
 }
 ```
@@ -73,188 +62,22 @@ void main() {
 import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
 
 // GET request
-final response = await ApiClient.I.get('/users');
+final response = await ApiClient.instance.get('/users');
 print(response.data); // parsed JSON response
 
 // POST request
-final newUser = await ApiClient.I.post('/users', {
+final newUser = await ApiClient.instance.post('/users', {
   'name': 'John Doe',
   'email': 'john@example.com',
 });
 
 // PUT request
-final updated = await ApiClient.I.put('/users/1', {
+final updated = await ApiClient.instance.put('/users/1', {
   'name': 'Jane Doe',
 });
 
 // DELETE request
-await ApiClient.I.delete('/users/1');
-```
-
-## Usage
-
-### Advanced Configuration
-
-#### With Token Provider & Refresh Token
-
-```dart
-ApiClient.init(ApiConfig(
-  baseUrl: 'https://api.example.com',
-  timeout: Duration(seconds: 30),
-  
-  // Provide access token for authenticated requests
-  tokenProvider: () async {
-    // Get token from secure storage, SharedPreferences, etc
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('access_token');
-  },
-  
-  // Auto refresh token when 401
-  refreshToken: (oldToken) async {
-    try {
-      final response = await http.post(
-        Uri.parse('https://api.example.com/refresh'),
-        body: {'token': oldToken},
-      );
-      final data = jsonDecode(response.body);
-      
-      // Save new token
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('access_token', data['access_token']);
-      
-      return data['access_token'];
-    } catch (e) {
-      return null; // Return null if refresh failed
-    }
-  },
-  
-  // Handle unauthorized (after refresh token failed)
-  onUnauthorized: (statusCode, body) async {
-    // Navigate to login screen, clear session, etc
-    print('Session expired. Please login again.');
-  },
-  
-  // Add global headers
-  defaultHeaders: () async {
-    return {
-      'X-App-Version': '1.0.0',
-      'X-Platform': Platform.isAndroid ? 'android' : 'ios',
-    };
-  },
-));
-```
-
-#### Custom HTTP Client (for logging/mocking)
-
-```dart
-class LoggingClient extends http.BaseClient {
-  final http.Client _inner = http.Client();
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
-    print('${request.method} ${request.url}');
-    return _inner.send(request);
-  }
-}
-
-ApiClient.init(ApiConfig(
-  baseUrl: 'https://api.example.com',
-  httpClient: LoggingClient(),
-));
-```
-
-### Request Options
-
-#### Query Parameters
-
-```dart
-// Method 1: Using query parameter
-final users = await ApiClient.I.get(
-  '/users',
-  query: {'page': 1, 'limit': 10, 'role': 'admin'},
-);
-
-// Method 2: Using ApiRequestOptions
-final users = await ApiClient.I.get(
-  '/users',
-  opts: ApiRequestOptions(
-    query: {'page': 1, 'limit': 10},
-  ),
-);
-```
-
-#### Custom Headers per Request
-
-```dart
-final response = await ApiClient.I.get(
-  '/users',
-  opts: ApiRequestOptions(
-    headers: {
-      'X-Custom-Header': 'value',
-      'Accept-Language': 'en',
-    },
-  ),
-);
-```
-
-#### Skip Authentication
-
-```dart
-// For public endpoints
-final response = await ApiClient.I.get(
-  '/public/data',
-  opts: ApiRequestOptions(skipAuth: true),
-);
-```
-
-#### Override Base URL
-
-```dart
-// Use different base URL for specific request
-final response = await ApiClient.I.get(
-  '/external-api/data',
-  opts: ApiRequestOptions(
-    baseUrl: 'https://external-api.com',
-  ),
-);
-```
-
-### Error Handling
-
-```dart
-try {
-  final response = await ApiClient.I.get('/users');
-  print('Success: ${response.data}');
-} on ApiException catch (e) {
-  // HTTP errors (4xx, 5xx)
-  print('API Error: ${e.message}');
-  print('Status Code: ${e.statusCode}');
-  print('Response Data: ${e.data}');
-} on NetworkException catch (e) {
-  // Network/connection errors
-  print('Network Error: ${e.message}');
-} catch (e) {
-  // Other errors
-  print('Unexpected Error: $e');
-}
-```
-
-### Working with Response
-
-```dart
-final response = await ApiClient.I.get('/users');
-
-// Access response data
-print(response.statusCode); // 200
-print(response.data); // parsed JSON (Map or List)
-print(response.headers); // response headers
-
-// Type-safe parsing
-if (response.data is List) {
-  final users = (response.data as List)
-      .map((json) => User.fromJson(json))
-      .toList();
-}
+await ApiClient.instance.delete('/users/1');
 ```
 
 ### Complete Example
@@ -304,7 +127,7 @@ class _UserListScreenState extends State<UserListScreen> {
     });
 
     try {
-      final response = await ApiClient.I.get('/users');
+      final response = await ApiClient.instance.get('/users');
       setState(() {
         users = response.data as List;
         isLoading = false;
@@ -354,15 +177,15 @@ Singleton HTTP client for REST API communication.
 #### Static Methods
 
 - `init(ApiConfig config)` - Initialize singleton instance
-- `I` - Get singleton instance
+- `instance` - Get singleton instance
 
 #### Instance Methods
 
-- `get(String endpoint, {Map<String, dynamic>? query, ApiRequestOptions opts})` - GET request
-- `post(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})` - POST request
-- `put(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})` - PUT request
-- `patch(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})` - PATCH request
-- `delete(String endpoint, {Map<String, dynamic>? query, ApiRequestOptions opts, dynamic body})` - DELETE request
+- GET request - `get(String endpoint, {Map<String, dynamic>? query, ApiRequestOptions opts})`
+- POST request - `post(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})`
+- PUT request - `put(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})`
+- PATCH request - `patch(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})`
+- DELETE request - `delete(String endpoint, {Map<String, dynamic>? query, ApiRequestOptions opts, dynamic body})`
 
 ### `ApiConfig`
 
@@ -417,9 +240,9 @@ Exception for network/connection errors. Extends `ApiException`.
 
 ## Platform Support
 
-| Android | iOS | MacOS | Web | Linux | Windows |
-|---------|-----|-------|-----|-------|---------|
-| ✅      | ✅  | ✅    | ✅  | ✅    | ✅      |
+| Android | iOS | MacOS | Web |
+|---------|-----|-------|-----|
+| ✅      | ✅  | ✅    | ✅  |
 
 ## Requirements
 
@@ -434,13 +257,7 @@ See the [/example](https://github.com/ramadhanhadiatmaa/flutterx_starter_kit/tre
 
 ### Contributing
 
-Contributions are welcome! Please:
-
-1. Fork this repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Contributions are welcome!
 
 ### Issues and Feedback
 
@@ -454,9 +271,6 @@ If you find a bug or have a feature suggestion:
 
 - [ ] UI Components (Button, Card, TextField, etc.)
 - [ ] Responsive utilities
-- [ ] State management integration
-- [ ] Form validation helpers
-- [ ] Internationalization (i18n) support
 - [ ] Theme management
 - [ ] Navigation utilities
 - [ ] Advanced logging system

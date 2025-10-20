@@ -5,16 +5,9 @@ import 'api_config.dart';
 import 'exceptions.dart';
 
 class ApiRequestOptions {
-  /// Override baseUrl per request (opsional)
   final String? baseUrl;
-
-  /// Header tambahan/override per request
   final Map<String, String>? headers;
-
-  /// Jika true, jangan kirim Authorization header
   final bool skipAuth;
-
-  /// Query params
   final Map<String, dynamic>? query;
 
   const ApiRequestOptions({
@@ -47,40 +40,33 @@ class ApiResponse<T> {
 }
 
 class ApiClient {
-  // ===== Singleton support =====
   static ApiClient? _instance;
-
-  /// Init singleton
   static void init(ApiConfig config) {
     _instance = ApiClient(config);
   }
 
-  /// Ambil singleton
-  static ApiClient get I {
+  static ApiClient get instance {
     final i = _instance;
     if (i == null) {
-      throw StateError(
-        'ApiClient belum di-init. Panggil ApiClient.init(...) terlebih dahulu.',
-      );
+      throw StateError('ApiClient not initialize.');
     }
     return i;
   }
 
-  // ===== Instance =====
+  @Deprecated('Use ApiClient.instance instead')
+  static ApiClient get I => instance;
+
   final ApiConfig _config;
   final http.Client _client;
   bool _isRefreshing = false;
 
-  /// Unnamed constructor (supaya bisa instantiate langsung, mis. di unit-test)
   ApiClient(this._config) : _client = _config.httpClient ?? http.Client();
 
-  // ===== Utils =====
   String _buildUrl(String base, String endpoint, Map<String, dynamic>? query) {
     final b = base.endsWith('/') ? base.substring(0, base.length - 1) : base;
     final e = endpoint.startsWith('/') ? endpoint : '/$endpoint';
     final uri = Uri.parse('$b$e');
 
-    // Jangan tambahkan '?' jika query null/empty
     if (query == null || query.isEmpty) {
       return uri.toString();
     }
@@ -132,10 +118,9 @@ class ApiClient {
     try {
       data = body.isNotEmpty ? jsonDecode(body) : null;
     } catch (_) {
-      data = body; // fallback non-JSON
+      data = body;
     }
 
-    // 401 → coba refresh token (sekali)
     if (status == 401 && allowRefresh && _config.refreshToken != null) {
       if (!_isRefreshing) {
         _isRefreshing = true;
@@ -144,7 +129,6 @@ class ApiClient {
           final newToken = await _config.refreshToken!.call(old);
           _isRefreshing = false;
           if (newToken != null && newToken.isNotEmpty) {
-            // Ulang sekali setelah refresh
             return _handle(doCall, allowRefresh: false);
           }
         } catch (_) {
@@ -164,10 +148,6 @@ class ApiClient {
     return ApiResponse(statusCode: status, data: data, headers: headers);
   }
 
-  // ===== HTTP METHODS =====
-  // Menerima:
-  // - [query] sebagai named param
-  // - [opts] yang juga bisa memuat query (opts.query override query)
   Future<ApiResponse<dynamic>> get(
     String endpoint, {
     Map<String, dynamic>? query,
