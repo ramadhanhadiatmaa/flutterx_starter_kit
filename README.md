@@ -4,7 +4,7 @@
 [![likes](https://img.shields.io/pub/likes/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
 [![pub points](https://img.shields.io/pub/points/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
 
-A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices.
+A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices especially with GetX state management.
 
 ## Features
 

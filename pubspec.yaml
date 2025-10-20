@@ -1,6 +1,5 @@
 name: flutterx_starter_kit
-description: "A comprehensive starter kit to accelerate Flutter application
-  development with ready-to-use components following best practices."
+description: "A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices especially with GetX state management."
 version: 0.0.2
 homepage: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
 repository: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
