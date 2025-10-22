@@ -10,6 +10,7 @@ A comprehensive starter kit to accelerate Flutter application development with r
 
 ### ✅ Currently Available
 
+- 💻 **CLI Helpers** - Generate your project fast code fast deploy
 - 🌐 **ApiClient** - Powerful HTTP client with complete features
 
 ### 🚧 Coming Soon
@@ -35,7 +36,53 @@ flutter pub add flutterx_starter_kit
 
 ## Getting Started
 
-### 1. Initialize ApiClient
+### Setup
+
+Add dependencies `flutter_dotenv`
+
+```bash
+flutter pub add flutter_dotenv
+```
+
+Create `.env` in root folder
+
+```env
+API_BASE_URL = www.example-api.com
+```
+
+Add `.env` to `assets`
+
+```yml
+flutter:
+  assets:
+    - .env
+```
+
+Don't forget add `async` in your `main()`
+
+```dart
+void main() async {
+```
+
+### 1. Initialize ApiClient with CLI
+
+```bash
+flutter pub global activate flutterx_starter_kit
+```
+
+Or
+
+```bash
+dart pub global activate flutterx_starter_kit
+```
+
+And Then
+
+```bash
+flutterx init
+```
+
+### 2. Initialize ApiClient Manually
 
 Initialize `ApiClient` in `main()` before `runApp()`:
 
@@ -56,7 +103,7 @@ void main() {
 }
 ```
 
-### 2. Basic Usage
+### 3. Basic Usage
 
 ```dart
 import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';

@@ -107,7 +107,7 @@ class ApiClient {
     try {
       res = await doCall().timeout(_config.timeout);
     } catch (e) {
-      throw NetworkException('Koneksi gagal: $e');
+      throw NetworkException('Connection failed: $e');
     }
 
     final status = res.statusCode;

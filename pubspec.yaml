@@ -1,6 +1,8 @@
 name: flutterx_starter_kit
-description: "A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices especially with GetX state management."
-version: 0.0.2
+description: "A comprehensive starter kit to accelerate Flutter application
+  development with ready-to-use components following best practices especially
+  with GetX state management."
+version: 0.0.3
 homepage: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
 repository: https://github.com/ramadhanhadiatmaa/flutterx_starter_kit
 
@@ -8,11 +10,17 @@ environment:
   sdk: ^3.9.0
   flutter: ">=1.17.0"
 
+executables:
+  flutterx: flutterx
+
 dependencies:
+  args: ^2.5.0
   flutter:
     sdk: flutter
-  get: ^4.7.2
+  flutter_dotenv: ^6.0.0
   http: ^1.5.0
+  path: ^1.9.0
+  recase: ^4.1.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
