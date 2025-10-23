@@ -15,6 +15,9 @@ void main() async {
   await dotenv.load(fileName: '.env');
   final base = dotenv.env['API_BASE_URL'];
   ApiClient.init(ApiConfig(baseUrl: base!));
+
+  // Configure TextKit font
+  TextKitConfig.setFont('fredoka');
   // End code
 
   runApp(const MyApp());
@@ -130,11 +133,12 @@ class _SuratDetailPageState extends State<SuratDetailPage> {
                   child: Text(deskripsi),
                 ),
               const Divider(),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(16),
-                child: Text(
+                // TextKit usage
+                child: TextKit.bodyLarge(
                   'Daftar Ayat',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  color: Colors.blueAccent,
                 ),
               ),
               if (ayatList.isEmpty)
@@ -163,4 +167,5 @@ class _SuratDetailPageState extends State<SuratDetailPage> {
     );
   }
 }
+
 ```
