@@ -13,3 +13,7 @@
 * Fix bug
 
 * Add CLI to generate code
+
+## 0.0.4
+
+* Add Textkit with font in CLI

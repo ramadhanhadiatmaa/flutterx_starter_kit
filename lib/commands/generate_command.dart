@@ -1,49 +1,65 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:path/path.dart' as path;
 import 'package:recase/recase.dart';
 
+/// CLI subcommand that scaffolds boilerplate files/folders.
+///
+/// Supported `--type` values:
+/// - `feature`  → multi-folder structure (model, repository, page)
+/// - `api`      → small HTTP wrapper class
+/// - `model`    → simple data model with `fromJson`/`toJson`
+/// - `page`     → minimal Flutter `Scaffold` page
 class GenerateCommand {
+  /// Returns the argument parser for this subcommand.
+  /// Options:
+  /// - `--name` / `-n`   : required feature/module name to scaffold
+  /// - `--type` / `-t`   : scaffold type; allowed values:
+  ///                       `feature`, `api`, `model`, `page`
+  /// - `--output` / `-o` : output directory (default: `lib`)
+  /// - `--help` / `-h`   : show help
   ArgParser get argParser {
     return ArgParser()
       ..addOption(
         'name',
         abbr: 'n',
-        help: 'Nama feature/module yang akan digenerate',
+        help: 'Feature/module name to generate (e.g., "user").',
       )
       ..addOption(
         'type',
         abbr: 't',
         defaultsTo: 'feature',
         allowed: ['feature', 'api', 'model', 'page'],
-        help: 'Jenis code yang akan digenerate',
+        help: 'Type of code to generate.',
       )
       ..addOption(
         'output',
         abbr: 'o',
         defaultsTo: 'lib',
-        help: 'Output directory',
+        help: 'Output directory.',
       )
-      ..addFlag('help', abbr: 'h', negatable: false);
+      ..addFlag('help', abbr: 'h', negatable: false, help: 'Show help.');
   }
 
+  /// Executes the command using parsed [results].
   Future<void> run(ArgResults results) async {
-    if (results['help']) {
+    if (results['help'] == true) {
       _printHelp();
       return;
     }
 
     final name = results['name'] as String?;
-    if (name == null || name.isEmpty) {
+    if (name == null || name.trim().isEmpty) {
       throw Exception(
-        '--name diperlukan. Gunakan: flutterx generate --name <nama>',
+        '--name is required. Usage: flutterx generate --name <name>',
       );
     }
 
     final type = results['type'] as String;
     final output = results['output'] as String;
 
-    print('🚀 Generating $type: $name...');
+    log('🚀 Generating $type: $name ...');
 
     switch (type) {
       case 'feature':
@@ -58,16 +74,19 @@ class GenerateCommand {
       case 'page':
         await _generatePage(name, output);
         break;
+      default:
+        throw Exception('Unknown type: $type');
     }
 
-    print('✅ Generate complete!');
+    log('✅ Generate complete!');
   }
 
+  /// Generates a **feature** folder structure with initial files.
   Future<void> _generateFeature(String name, String outputPath) async {
     final rc = ReCase(name);
     final featurePath = path.join(outputPath, 'features', rc.snakeCase);
 
-    // Buat struktur folder
+    // Create folder structure
     await _createDirectory(path.join(featurePath, 'data/models'));
     await _createDirectory(path.join(featurePath, 'data/repositories'));
     await _createDirectory(path.join(featurePath, 'domain/entities'));
@@ -82,38 +101,41 @@ class GenerateCommand {
     await _generateRepository(name, featurePath);
     await _generatePage(name, featurePath);
 
-    print('  📁 Feature structure created at: $featurePath');
+    log('  📁 Feature structure created at: $featurePath');
   }
 
+  /// Generates a simple **API** wrapper class under `data/api/`.
   Future<void> _generateApi(String name, String outputPath) async {
     final rc = ReCase(name);
-    final apiPath = path.join(outputPath, 'data/api');
+    final apiPath = path.join(outputPath, 'data', 'api');
     await _createDirectory(apiPath);
 
     final file = File(path.join(apiPath, '${rc.snakeCase}_api.dart'));
     final content = _getApiTemplate(rc);
     await file.writeAsString(content);
 
-    print('  ✅ API created: ${file.path}');
+    log('  ✅ API created: ${file.path}');
   }
 
+  /// Generates a simple **model** with `fromJson`/`toJson` under `data/models/`.
   Future<void> _generateModel(String name, String outputPath) async {
     final rc = ReCase(name);
-    final modelPath = path.join(outputPath, 'data/models');
+    final modelPath = path.join(outputPath, 'data', 'models');
     await _createDirectory(modelPath);
 
     final file = File(path.join(modelPath, '${rc.snakeCase}_model.dart'));
     final content = _getModelTemplate(rc);
     await file.writeAsString(content);
 
-    print('  ✅ Model created: ${file.path}');
+    log('  ✅ Model created: ${file.path}');
   }
 
+  /// Generates a **repository** interface and implementation files.
   Future<void> _generateRepository(String name, String repoPath) async {
     final rc = ReCase(name);
 
     // Interface
-    final interfacePath = path.join(repoPath, 'domain/repositories');
+    final interfacePath = path.join(repoPath, 'domain', 'repositories');
     await _createDirectory(interfacePath);
     final interfaceFile = File(
       path.join(interfacePath, '${rc.snakeCase}_repository.dart'),
@@ -121,35 +143,38 @@ class GenerateCommand {
     await interfaceFile.writeAsString(_getRepositoryInterfaceTemplate(rc));
 
     // Implementation
-    final implPath = path.join(repoPath, 'data/repositories');
+    final implPath = path.join(repoPath, 'data', 'repositories');
     await _createDirectory(implPath);
     final implFile = File(
       path.join(implPath, '${rc.snakeCase}_repository_impl.dart'),
     );
     await implFile.writeAsString(_getRepositoryImplTemplate(rc));
 
-    print('  ✅ Repository created: ${interfaceFile.path}');
+    log('  ✅ Repository created: ${interfaceFile.path}');
   }
 
+  /// Generates a minimal **page** under `presentation/pages/`.
   Future<void> _generatePage(String name, String outputPath) async {
     final rc = ReCase(name);
-    final pagePath = path.join(outputPath, 'presentation/pages');
+    final pagePath = path.join(outputPath, 'presentation', 'pages');
     await _createDirectory(pagePath);
 
     final file = File(path.join(pagePath, '${rc.snakeCase}_page.dart'));
     final content = _getPageTemplate(rc);
     await file.writeAsString(content);
 
-    print('  ✅ Page created: ${file.path}');
+    log('  ✅ Page created: ${file.path}');
   }
 
-  Future<void> _createDirectory(String path) async {
-    final dir = Directory(path);
+  /// Creates a directory (recursively) if it doesn't already exist.
+  Future<void> _createDirectory(String dirPath) async {
+    final dir = Directory(dirPath);
     if (!dir.existsSync()) {
       await dir.create(recursive: true);
     }
   }
 
+  /// Template for a simple model.
   String _getModelTemplate(ReCase rc) {
     return '''
 class ${rc.pascalCase}Model {
@@ -178,6 +203,7 @@ class ${rc.pascalCase}Model {
 ''';
   }
 
+  /// Template for a tiny API wrapper using `http`.
   String _getApiTemplate(ReCase rc) {
     return '''
 import 'package:http/http.dart' as http;
@@ -229,6 +255,7 @@ class ${rc.pascalCase}Api {
 ''';
   }
 
+  /// Template for a repository **interface**.
   String _getRepositoryInterfaceTemplate(ReCase rc) {
     return '''
 abstract class ${rc.pascalCase}Repository {
@@ -239,6 +266,7 @@ abstract class ${rc.pascalCase}Repository {
 ''';
   }
 
+  /// Template for a repository **implementation**.
   String _getRepositoryImplTemplate(ReCase rc) {
     return '''
 import '../models/${rc.snakeCase}_model.dart';
@@ -270,6 +298,7 @@ class ${rc.pascalCase}RepositoryImpl implements ${rc.pascalCase}Repository {
 ''';
   }
 
+  /// Template for a minimal Flutter page.
   String _getPageTemplate(ReCase rc) {
     return '''
 import 'package:flutter/material.dart';
@@ -292,8 +321,9 @@ class ${rc.pascalCase}Page extends StatelessWidget {
 ''';
   }
 
+  /// Prints CLI help/usage for this subcommand.
   void _printHelp() {
-    print('''
+    log('''
 Generate boilerplate code
 
 Usage: flutterx generate [options]
@@ -301,10 +331,11 @@ Usage: flutterx generate [options]
 Options:
 ${argParser.usage}
 
-Contoh:
+Examples:
   flutterx generate --name user --type feature
   flutterx generate -n product -t api
   flutterx generate -n order -t model
+  flutterx generate -n dashboard -t page
 ''');
   }
 }

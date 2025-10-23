@@ -1,10 +1,10 @@
 # FlutterX Starter Kit
 
-[![pub package](https://img.shields.io/pub/v/flutterx_starter_kit.svg)](https://pub.dev/packages/flutterx_starter_kit)
-[![likes](https://img.shields.io/pub/likes/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
-[![pub points](https://img.shields.io/pub/points/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
+![FlutterX Starter Kit](assets/logo_fsk.png)
 
-A comprehensive starter kit to accelerate Flutter application development with ready-to-use components following best practices especially with GetX state management.
+[![pub package](https://img.shields.io/pub/v/flutterx_starter_kit.svg)](https://pub.dev/packages/flutterx_starter_kit) [![likes](https://img.shields.io/pub/likes/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score) [![pub points](https://img.shields.io/pub/points/flutterx_starter_kit?logo=dart)](https://pub.dev/packages/flutterx_starter_kit/score)
+
+A comprehensive starter kit that accelerates Flutter app development with ready-to-use components and best practices, especially for GetX state management.
 
 ## Features
 
@@ -12,10 +12,10 @@ A comprehensive starter kit to accelerate Flutter application development with r
 
 - 💻 **CLI Helpers** - Generate your project fast code fast deploy
 - 🌐 **ApiClient** - Powerful HTTP client with complete features
+- 🎨 **UI Components** - Widget library (TextKit)
 
 ### 🚧 Coming Soon
 
-- 🎨 **UI Components** - Widget library (Button, Card, Input, etc.)
 - 📱 **Responsive Utils** - Helper for responsive design
 - 📊 **Logger** - Advanced logging system
 
@@ -64,7 +64,7 @@ Don't forget add `async` in your `main()`
 void main() async {
 ```
 
-### 1. Initialize ApiClient with CLI
+### Initialize ApiClient with CLI
 
 ```bash
 flutter pub global activate flutterx_starter_kit
@@ -76,13 +76,13 @@ Or
 dart pub global activate flutterx_starter_kit
 ```
 
-And Then
+And Then:
 
 ```bash
 flutterx init
 ```
 
-### 2. Initialize ApiClient Manually
+### Initialize ApiClient Manually
 
 Initialize `ApiClient` in `main()` before `runApp()`:
 
@@ -103,7 +103,7 @@ void main() {
 }
 ```
 
-### 3. Basic Usage
+### Basic Usage
 
 ```dart
 import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
@@ -127,92 +127,201 @@ final updated = await ApiClient.instance.put('/users/1', {
 await ApiClient.instance.delete('/users/1');
 ```
 
-### Complete Example
+### Font Usage
 
 ```dart
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+```
+
+Initialize
+
+```dart
+# Font poppins (default)
+flutterx init --file lib/main.dart
+
+# Font fredoka
+flutterx init --file lib/main.dart --font fredoka
+
+# Font montserrat
+flutterx init --file lib/main.dart --font montserrat
+```
+
+🎨 Currently Supported Fonts
+
+| Font Name | Command | Style | Best For |
+|-----------|---------|-------|----------|
+| **Poppins** | `--font poppins` | Modern, Geometric | Default, General purpose, UI elements |
+| **Fredoka** | `--font fredoka` | Rounded, Friendly | Playful apps, Kids content, Fun branding |
+| **Roboto** | `--font roboto` | Neutral, Clean | Material Design, Android apps |
+| **Montserrat** | `--font montserrat` | Elegant, Professional | Business apps, Professional content |
+| **Open Sans** | `--font opensans` | Humanist, Readable | Long-form content, Articles, Blogs |
+| **Lato** | `--font lato` | Warm, Stable | Corporate, Professional websites |
+| **Nunito** | `--font nunito` | Rounded, Balanced | Friendly interfaces, Modern apps |
+| **Raleway** | `--font raleway` | Elegant, Thin | Fashion, Luxury, Minimalist designs |
+| **Inter** | `--font inter` | Modern, Precise | UI/UX, Dashboard, Data-heavy apps |
+
+🧾 Quick Reference
+
+| Method         | Size | Weight   | Usage                  |
+|----------------|:----:|----------|------------------------|
+| `displayLarge` |  57  | Light    | Splash/Onboarding hero |
+| `displayMedium`|  45  | Regular  | Main page headline     |
+| `displaySmall` |  36  | Regular  | Sub headline           |
+| `headLineLarge`|  32  | SemiBold | Page title (AppBar)    |
+| `headLineMedium`| 28  | SemiBold | Section title          |
+| `headLineSmall`|  24  | SemiBold | Important subtitle     |
+| `titleLarge`   |  22  | SemiBold | Card/Dialog title      |
+| `titleMedium`  |  16  | Medium   | List title             |
+| `titleSmall`   |  14  | Medium   | Card subtitle          |
+| `bodyLarge`    |  16  | Regular  | Main paragraph         |
+| `bodyMedium`   |  14  | Regular  | Secondary text         |
+| `bodySmall`    |  12  | Regular  | Caption                |
+| `labelLarge`   |  14  | Medium   | Button text            |
+| `labelMedium`  |  12  | Medium   | Chip/Small button      |
+| `labelSmall`   |  11  | Regular  | Helper/Hint text       |
+
+example
+
+```dart
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+class ExamplePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: TextKit.titleLarge('My App'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ===== DISPLAY STYLES =====
+            TextKit.displayLarge('Hero Text'),
+            SizedBox(height: 8),
+            TextKit.displayMedium('Welcome Back!'),
+            SizedBox(height: 8),
+            TextKit.displaySmall('Subtitle Hero'),
+            
+            SizedBox(height: 24),
+            
+            // ===== HEADLINE STYLES =====
+            TextKit.headlineLarge('Main Headline'),
+            SizedBox(height: 8),
+            TextKit.headlineMedium('Section Title'),
+            SizedBox(height: 8),
+            TextKit.headlineSmall('Sub Section'),
+            
+            SizedBox(height: 24),
+            
+            // ===== TITLE STYLES =====
+            TextKit.titleLarge('Card Title'),
+            SizedBox(height: 8),
+            TextKit.titleMedium('List Item Title'),
+            SizedBox(height: 8),
+            TextKit.titleSmall('Small Title', color: Colors.grey),
+            
+            SizedBox(height: 24),
+            
+            // ===== BODY STYLES =====
+            TextKit.bodyLarge(
+              'This is the main paragraph text. Lorem ipsum dolor sit amet, '
+              'consectetur adipiscing elit.',
+              height: 1.6,
+            ),
+            SizedBox(height: 8),
+            TextKit.bodyMedium(
+              'Secondary description text here.',
+              color: Colors.grey[700],
+            ),
+            SizedBox(height: 8),
+            TextKit.bodySmall(
+              'Small caption or note text.',
+              color: Colors.grey[600],
+            ),
+            
+            SizedBox(height: 24),
+            
+            // ===== LABEL STYLES (untuk Button, dll) =====
+            ElevatedButton(
+              onPressed: () {},
+              child: TextKit.labelLarge('Button Text'),
+            ),
+            SizedBox(height: 8),
+            Chip(
+              label: TextKit.labelMedium('Chip Label', color: Colors.black),
+            ),
+            SizedBox(height: 8),
+            TextKit.labelSmall('Helper text or hint'),
+            SizedBox(height: 8),
+            TextKit.bodyLarge(
+              'Very long text that might overflow...',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              color: Colors.blue,
+            ),
+            TextKit.headlineMedium(
+              'Centered Title',
+              align: TextAlign.center,
+              color: Theme.of(context).primaryColor,
+            ),
+            TextKit.bodyLarge(
+              'Paragraph with custom line height for better readability.',
+              height: 1.8,
+              color: Colors.black87,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### Others Example
+
+```dart
+//example 1
 import 'package:flutter/material.dart';
 import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+String? accessToken = 'xxx123xxx123';
 
 void main() {
   ApiClient.init(ApiConfig(
     baseUrl: 'https://jsonplaceholder.typicode.com',
-    timeout: Duration(seconds: 30),
+    tokenProvider: () async => accessToken, // Set global Authorization
   ));
-  
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: UserListScreen(),
-    );
-  }
-}
+//example 2
+final public = await ApiClient.instance.get('/v1/info',
+  opts: const ApiRequestOptions(skipAuth: true), // Skip headers
+);
 
-class UserListScreen extends StatefulWidget {
-  @override
-  _UserListScreenState createState() => _UserListScreenState();
-}
+//example 3
+await ApiClient.instance.get(
+  '/v1/public-info',
+  opts: const ApiRequestOptions(
+    skipAuth: true,
+    headers: {'X-Trace': 'abc123'}, // Need others headers
+  ),
+);
 
-class _UserListScreenState extends State<UserListScreen> {
-  List<dynamic> users = [];
-  bool isLoading = false;
-  String? error;
+//example 4
+ApiClient.init(ApiConfig(baseUrl: 'https://api.example.com'));
+// Not set global, need authorization
+final res1 = await ApiClient.instance.get(
+  '/v1/secure-data',
+  opts: const ApiRequestOptions(
+    headers: {'Authorization': 'Bearer xxx123xxx123'}, // If not set global, add 'Bearer'
+  ),
+);
+// Not set global, no needed authorization
+final res2 = await ApiClient.instance.get('/v1/public-info');
 
-  @override
-  void initState() {
-    super.initState();
-    fetchUsers();
-  }
-
-  Future<void> fetchUsers() async {
-    setState(() {
-      isLoading = true;
-      error = null;
-    });
-
-    try {
-      final response = await ApiClient.instance.get('/users');
-      setState(() {
-        users = response.data as List;
-        isLoading = false;
-      });
-    } on ApiException catch (e) {
-      setState(() {
-        error = 'Error: ${e.message}';
-        isLoading = false;
-      });
-    } on NetworkException catch (e) {
-      setState(() {
-        error = 'Network error: ${e.message}';
-        isLoading = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Users')),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : error != null
-              ? Center(child: Text(error!))
-              : ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-                    return ListTile(
-                      title: Text(user['name']),
-                      subtitle: Text(user['email']),
-                    );
-                  },
-                ),
-    );
-  }
-}
 ```
 
 ## API Reference
@@ -281,10 +390,6 @@ Exception for HTTP errors (4xx, 5xx).
 - `message` (String) - Error message
 - `data` (dynamic) - Response body
 
-#### `NetworkException`
-
-Exception for network/connection errors. Extends `ApiException`.
-
 ## Platform Support
 
 | Android | iOS | MacOS | Web |
@@ -304,7 +409,7 @@ See the [/example](https://github.com/ramadhanhadiatmaa/flutterx_starter_kit/tre
 
 ### Contributing
 
-Contributions are welcome!
+Contributions are welcome for everyone!
 
 ### Issues and Feedback
 

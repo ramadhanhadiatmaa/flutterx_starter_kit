@@ -1,5 +1,6 @@
 #!/usr/bin/env dart
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:flutterx_starter_kit/commands/init_command.dart';
@@ -34,18 +35,18 @@ void main(List<String> arguments) async {
         await generateCommand.run(command!);
         break;
       default:
-        print('Command not found: ${command?.name}');
+        log('Command not found: ${command?.name}');
         _printHelp(parser);
         exit(1);
     }
   } catch (e) {
-    print('Error: $e');
+    log('Error: $e');
     exit(1);
   }
 }
 
 void _printHelp(ArgParser parser) {
-  print('''
+  log('''
 FlutterX Starter Kit - CLI Code Generator
 
 Usage: flutterx <command> [arguments]
