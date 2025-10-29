@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:flutterx_starter_kit/commands/init_command.dart';
-import 'package:flutterx_starter_kit/commands/generate_command.dart';
+import 'package:flutterx_starter_kit/commands/font_command.dart';
 
 void main(List<String> arguments) async {
   final parser = ArgParser()
@@ -12,10 +12,10 @@ void main(List<String> arguments) async {
 
   // Add subcommands dengan parser masing-masing
   final initCommand = InitCommand();
-  parser.addCommand('init', initCommand.argParser);
+  final fontCommand = FontCommand();
 
-  final generateCommand = GenerateCommand();
-  parser.addCommand('generate', generateCommand.argParser);
+  parser.addCommand('init', initCommand.argParser);
+  parser.addCommand('font', fontCommand.argParser);
 
   try {
     final results = parser.parse(arguments);
@@ -31,8 +31,8 @@ void main(List<String> arguments) async {
       case 'init':
         await initCommand.run(command!);
         break;
-      case 'generate':
-        await generateCommand.run(command!);
+      case 'font':
+        await fontCommand.run(command!);
         break;
       default:
         log('Command not found: ${command?.name}');
@@ -52,19 +52,19 @@ FlutterX Starter Kit - CLI Code Generator
 Usage: flutterx <command> [arguments]
 
 Commands:
-  init        Inject initialization code to main.dart
-  generate    Generate boilerplate code for new feature
+  init        Inject REST API initialization code to main.dart
+  font        Configure TextKit font in main.dart
 
 Global options:
 ${parser.usage}
 
 Examples:
   flutterx init --file lib/main.dart
-  flutterx generate --name user --type feature
-  flutterx generate --name product --type api
+  flutterx font --name fredoka
+  flutterx font -n montserrat
 
 For specific command help:
   flutterx init --help
-  flutterx generate --help
+  flutterx font --help
 ''');
 }
