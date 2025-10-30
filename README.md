@@ -10,14 +10,25 @@ A comprehensive starter kit that accelerates Flutter app development with ready-
 
 ### ✅ Currently Available
 
-- 💻 **CLI Helpers** - Generate your project fast code fast deploy
-- 🌐 **ApiClient** - Powerful HTTP client with complete features
-- 🎨 **UI Components** - Widget library (TextKit)
+- **CLI Helpers** - Generate your project fast code fast deploy
+- **ApiClient** - Powerful HTTP client with complete features
+- **UI Components** - Widget library (TextKit)
 
-### 🚧 Coming Soon
+### Coming Soon
 
-- 📱 **Responsive Utils** - Helper for responsive design
-- 📊 **Logger** - Advanced logging system
+- **Responsive Utils** - Helper for responsive design
+- **Logger** - Advanced logging system
+
+## Platform Support
+
+| Android | iOS | MacOS | Web |
+|---------|-----|-------|-----|
+| ✅      | ✅  | ✅    | ✅  |
+
+## Requirements
+
+- Flutter: `>=1.17.0`
+- Dart: `>=3.9.0`
 
 ## Installation
 
@@ -25,7 +36,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutterx_starter_kit: <latest-version>
+  flutterx_starter_kit: 0.0.5
 ```
 
 Or install via command line:
@@ -76,266 +87,30 @@ Or
 dart pub global activate flutterx_starter_kit
 ```
 
-And Then:
+Add flutterx ApiClient:
 
 ```bash
 flutterx init
 ```
 
-### Initialize ApiClient Manually
-
-Initialize `ApiClient` in `main()` before `runApp()`:
+Add flutterx font:
 
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+// default
+flutterx font
 
-void main() {
-  // Initialize API Client
-  ApiClient.init(ApiConfig(
-    baseUrl: const String.fromEnvironment(
-      'API_BASE_URL',
-      // If API_BASE_URL not setup in env
-      defaultValue: 'http://10.0.2.2:8080',
-    ),
-  ));
-  runApp(MyApp());
-}
+// long syntax
+flutterx font --name montserrat
+
+// short syntax
+flutterx font -name nunito
 ```
 
-### Basic Usage
+### ApiClient Usage
 
-```dart
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+API Reference
 
-// GET request
-final response = await ApiClient.instance.get('/users');
-print(response.data); // parsed JSON response
-
-// POST request
-final newUser = await ApiClient.instance.post('/users', {
-  'name': 'John Doe',
-  'email': 'john@example.com',
-});
-
-// PUT request
-final updated = await ApiClient.instance.put('/users/1', {
-  'name': 'Jane Doe',
-});
-
-// DELETE request
-await ApiClient.instance.delete('/users/1');
-```
-
-### Font Usage
-
-```dart
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-```
-
-Initialize
-
-```dart
-# Font poppins (default)
-flutterx init --file lib/main.dart
-
-# Font fredoka
-flutterx init --file lib/main.dart --font fredoka
-
-# Font montserrat
-flutterx init --file lib/main.dart --font montserrat
-```
-
-🎨 Currently Supported Fonts
-
-| Font Name | Command | Style | Best For |
-|-----------|---------|-------|----------|
-| **Poppins** | `--font poppins` | Modern, Geometric | Default, General purpose, UI elements |
-| **Fredoka** | `--font fredoka` | Rounded, Friendly | Playful apps, Kids content, Fun branding |
-| **Roboto** | `--font roboto` | Neutral, Clean | Material Design, Android apps |
-| **Montserrat** | `--font montserrat` | Elegant, Professional | Business apps, Professional content |
-| **Open Sans** | `--font opensans` | Humanist, Readable | Long-form content, Articles, Blogs |
-| **Lato** | `--font lato` | Warm, Stable | Corporate, Professional websites |
-| **Nunito** | `--font nunito` | Rounded, Balanced | Friendly interfaces, Modern apps |
-| **Raleway** | `--font raleway` | Elegant, Thin | Fashion, Luxury, Minimalist designs |
-| **Inter** | `--font inter` | Modern, Precise | UI/UX, Dashboard, Data-heavy apps |
-
-🧾 Quick Reference
-
-| Method         | Size | Weight   | Usage                  |
-|----------------|:----:|----------|------------------------|
-| `displayLarge` |  57  | Light    | Splash/Onboarding hero |
-| `displayMedium`|  45  | Regular  | Main page headline     |
-| `displaySmall` |  36  | Regular  | Sub headline           |
-| `headLineLarge`|  32  | SemiBold | Page title (AppBar)    |
-| `headLineMedium`| 28  | SemiBold | Section title          |
-| `headLineSmall`|  24  | SemiBold | Important subtitle     |
-| `titleLarge`   |  22  | SemiBold | Card/Dialog title      |
-| `titleMedium`  |  16  | Medium   | List title             |
-| `titleSmall`   |  14  | Medium   | Card subtitle          |
-| `bodyLarge`    |  16  | Regular  | Main paragraph         |
-| `bodyMedium`   |  14  | Regular  | Secondary text         |
-| `bodySmall`    |  12  | Regular  | Caption                |
-| `labelLarge`   |  14  | Medium   | Button text            |
-| `labelMedium`  |  12  | Medium   | Chip/Small button      |
-| `labelSmall`   |  11  | Regular  | Helper/Hint text       |
-
-example
-
-```dart
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-
-class ExamplePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: TextKit.titleLarge('My App'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ===== DISPLAY STYLES =====
-            TextKit.displayLarge('Hero Text'),
-            SizedBox(height: 8),
-            TextKit.displayMedium('Welcome Back!'),
-            SizedBox(height: 8),
-            TextKit.displaySmall('Subtitle Hero'),
-            
-            SizedBox(height: 24),
-            
-            // ===== HEADLINE STYLES =====
-            TextKit.headlineLarge('Main Headline'),
-            SizedBox(height: 8),
-            TextKit.headlineMedium('Section Title'),
-            SizedBox(height: 8),
-            TextKit.headlineSmall('Sub Section'),
-            
-            SizedBox(height: 24),
-            
-            // ===== TITLE STYLES =====
-            TextKit.titleLarge('Card Title'),
-            SizedBox(height: 8),
-            TextKit.titleMedium('List Item Title'),
-            SizedBox(height: 8),
-            TextKit.titleSmall('Small Title', color: Colors.grey),
-            
-            SizedBox(height: 24),
-            
-            // ===== BODY STYLES =====
-            TextKit.bodyLarge(
-              'This is the main paragraph text. Lorem ipsum dolor sit amet, '
-              'consectetur adipiscing elit.',
-              height: 1.6,
-            ),
-            SizedBox(height: 8),
-            TextKit.bodyMedium(
-              'Secondary description text here.',
-              color: Colors.grey[700],
-            ),
-            SizedBox(height: 8),
-            TextKit.bodySmall(
-              'Small caption or note text.',
-              color: Colors.grey[600],
-            ),
-            
-            SizedBox(height: 24),
-            
-            // ===== LABEL STYLES (untuk Button, dll) =====
-            ElevatedButton(
-              onPressed: () {},
-              child: TextKit.labelLarge('Button Text'),
-            ),
-            SizedBox(height: 8),
-            Chip(
-              label: TextKit.labelMedium('Chip Label', color: Colors.black),
-            ),
-            SizedBox(height: 8),
-            TextKit.labelSmall('Helper text or hint'),
-            SizedBox(height: 8),
-            TextKit.bodyLarge(
-              'Very long text that might overflow...',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              color: Colors.blue,
-            ),
-            TextKit.headlineMedium(
-              'Centered Title',
-              align: TextAlign.center,
-              color: Theme.of(context).primaryColor,
-            ),
-            TextKit.bodyLarge(
-              'Paragraph with custom line height for better readability.',
-              height: 1.8,
-              color: Colors.black87,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-```
-
-### Others Example
-
-```dart
-//example 1
-import 'package:flutter/material.dart';
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-
-String? accessToken = 'xxx123xxx123';
-
-void main() {
-  ApiClient.init(ApiConfig(
-    baseUrl: 'https://jsonplaceholder.typicode.com',
-    tokenProvider: () async => accessToken, // Set global Authorization
-  ));
-  runApp(MyApp());
-}
-
-//example 2
-final public = await ApiClient.instance.get('/v1/info',
-  opts: const ApiRequestOptions(skipAuth: true), // Skip headers
-);
-
-//example 3
-await ApiClient.instance.get(
-  '/v1/public-info',
-  opts: const ApiRequestOptions(
-    skipAuth: true,
-    headers: {'X-Trace': 'abc123'}, // Need others headers
-  ),
-);
-
-//example 4
-ApiClient.init(ApiConfig(baseUrl: 'https://api.example.com'));
-// Not set global, need authorization
-final res1 = await ApiClient.instance.get(
-  '/v1/secure-data',
-  opts: const ApiRequestOptions(
-    headers: {'Authorization': 'Bearer xxx123xxx123'}, // If not set global, add 'Bearer'
-  ),
-);
-// Not set global, no needed authorization
-final res2 = await ApiClient.instance.get('/v1/public-info');
-
-```
-
-## API Reference
-
-### `ApiClient`
-
-Singleton HTTP client for REST API communication.
-
-#### Static Methods
-
-- `init(ApiConfig config)` - Initialize singleton instance
-- `instance` - Get singleton instance
-
-#### Instance Methods
+### Instance Methods
 
 - GET request - `get(String endpoint, {Map<String, dynamic>? query, ApiRequestOptions opts})`
 - POST request - `post(String endpoint, dynamic body, {Map<String, dynamic>? query, ApiRequestOptions opts})`
@@ -390,26 +165,250 @@ Exception for HTTP errors (4xx, 5xx).
 - `message` (String) - Error message
 - `data` (dynamic) - Response body
 
-## Platform Support
+```dart
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
 
-| Android | iOS | MacOS | Web |
-|---------|-----|-------|-----|
-| ✅      | ✅  | ✅    | ✅  |
+// GET request
+final response = await ApiClient.instance.get('/users');
+print(response.data); // parsed JSON response
 
-## Requirements
+// POST request
+final newUser = await ApiClient.instance.post('/users', {
+  'name': 'John Doe',
+  'email': 'john@example.com',
+});
 
-- Flutter: `>=1.17.0`
-- Dart: `>=3.9.0`
+// PUT request
+final updated = await ApiClient.instance.put('/users/1', {
+  'name': 'Jane Doe',
+});
 
-## Examples
+// DELETE request
+await ApiClient.instance.delete('/users/1');
+```
 
-See the [/example](https://github.com/ramadhanhadiatmaa/flutterx_starter_kit/tree/main/example) folder for complete usage examples of this package.
+Others Example
+
+```dart
+//example 1
+import 'package:flutter/material.dart';
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+String? accessToken = 'xxx123xxx123';
+
+void main() {
+  ApiClient.init(ApiConfig(
+    baseUrl: 'https://jsonplaceholder.typicode.com',
+    tokenProvider: () async => accessToken, // Set global Authorization
+  ));
+  runApp(MyApp());
+}
+
+//example 2
+final public = await ApiClient.instance.get('/v1/info',
+  opts: const ApiRequestOptions(skipAuth: true), // Skip headers
+);
+
+//example 3
+await ApiClient.instance.get(
+  '/v1/public-info',
+  opts: const ApiRequestOptions(
+    skipAuth: true,
+    headers: {'X-Trace': 'abc123'}, // Need others headers
+  ),
+);
+
+//example 4
+ApiClient.init(ApiConfig(baseUrl: 'https://api.example.com'));
+// Not set global, need authorization
+final res1 = await ApiClient.instance.get(
+  '/v1/secure-data',
+  opts: const ApiRequestOptions(
+    headers: {'Authorization': 'Bearer xxx123xxx123'}, // If not set global, add 'Bearer'
+  ),
+);
+// Not set global, no needed authorization
+final res2 = await ApiClient.instance.get('/v1/public-info');
+```
+
+### TextKit Usage
+
+![FlutterX FontKit](assets/fontkit.png)
+
+Currently Supported Fonts
+
+| Font Name | Command | Font Name | Command |
+|-----------|---------|-------|----------|
+| **Poppins** | `--font poppins` | **Inter** | `--font inter` |
+| **Fredoka** | `--font fredoka` | **Raleway** | `--font raleway` |
+| **Roboto** | `--font roboto` | **Nunito** | `--font nunito` |
+| **Montserrat** | `--font montserrat` | **Lato** | `--font lato` |
+| **Open Sans** | `--font opensans` | (upcoming) | (upcoming) |
+
+Quick Reference
+
+| Method         | Size | Method   | Size                   |
+|----------------|:----:|----------|------------------------|
+| `displayLarge` |  57  | `labelLarge`    | 14              |
+| `displayMedium`|  45  | `labelMedium`   | 12              |
+| `displaySmall` |  36  | `labelSmall`    | 11              |
+| `headLineLarge`|  32  | `bodyLarge`     | 16              |
+| `headLineMedium`| 28  | `bodyMedium`    | 14              |
+| `headLineSmall`|  24  | `bodySmall`     | 12              |
+| `titleLarge`   |  22  |                 |                 |
+| `titleMedium`  |  16  |                 |                 |
+| `titleSmall`   |  14  |                 |                 |
+
+example
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+class Fontkit extends StatelessWidget {
+  const Fontkit({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.displayLarge('Display Large'),
+                    TextKit.displayMedium('Display Medium'),
+                    TextKit.displaySmall('Display Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.headlineLarge('Headline Large'),
+                    TextKit.headlineMedium('Headline Medium'),
+                    TextKit.headlineSmall('Headline Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.titleLarge('Title Large'),
+                    TextKit.titleMedium('Title Medium'),
+                    TextKit.titleSmall('Title Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.bodyLarge('Body Large'),
+                    TextKit.bodyMedium('Body Medium'),
+                    TextKit.bodySmall('Body Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.labelLarge('Label Large'),
+                    TextKit.labelMedium('Label Medium'),
+                    TextKit.labelSmall('Label Small'),
+                  ],
+                ),
+                SizedBox(height: 40),
+                TextKit.headlineMedium('Other examples'),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: TextKit.labelLarge('Button Text'),
+                    ),
+                    Chip(
+                      label: TextKit.labelMedium(
+                        'Chip Label',
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextKit.bodyLarge(
+                      'Very long text that might overflow...',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### ButtonKit Usage
+
+![FlutterX FontKit](assets/buttonkit.png)
+
+example
+
+```dart
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+class Fontkit extends StatelessWidget {
+  const Fontkit({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ButtonKit(
+                  text: "Sign In",
+                  textColor: Colors.white,
+                  bgColor: Colors.blue,
+                  press: () {},
+                  width: 200,
+                  height: 50,
+                ),
+                ButtonKitGradient(
+                  text: "This is Gradient",
+                  textColor: Colors.white,
+                  bgColor1: Colors.cyan,
+                  bgColor2: Colors.purpleAccent,
+                  press: () {},
+                  width: 200,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
 
 ## Additional Information
-
-### Contributing
-
-Contributions are welcome for everyone!
 
 ### Issues and Feedback
 
@@ -427,10 +426,6 @@ If you find a bug or have a feature suggestion:
 - [ ] Navigation utilities
 - [ ] Advanced logging system
 - [ ] Performance monitoring
-
-### Changelog
-
-See [CHANGELOG.md](https://github.com/ramadhanhadiatmaa/flutterx_starter_kit/blob/main/CHANGELOG.md) for version history.
 
 ### License
 

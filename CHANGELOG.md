@@ -17,3 +17,9 @@
 ## 0.0.4
 
 * Add Textkit with font in CLI
+
+## 0.0.5
+
+* Add ButtonKit
+
+* Separate Font CLI into `flutterx font`

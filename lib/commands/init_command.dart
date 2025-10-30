@@ -2,18 +2,17 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:args/args.dart';
 
-/// CLI subcommand that injects initialization code into a Flutter app's
+/// CLI subcommand that injects REST API initialization code into a Flutter app
 /// ### Typical Usage
 /// flutterx init
 /// flutterx init --file lib/main.dart
-/// flutterx init --file lib/main.dart --font fredoka
-/// flutterx init -f lib/app.dart --font montserrat
+/// flutterx init -f lib/app.dart
 class InitCommand {
   /// Start marker used to identify the beginning of the injected block.
-  final _startMarker = '// Start code';
+  final _startMarker = '// Start API init';
 
   /// End marker used to identify the end of the injected block.
-  final _endMarker = '// End code';
+  final _endMarker = '// End API init';
 
   /// Returns the argument parser for this command.
   ArgParser get argParser {
@@ -23,11 +22,6 @@ class InitCommand {
         abbr: 'f',
         defaultsTo: 'lib/main.dart',
         help: 'Path to main.dart',
-      )
-      ..addOption(
-        'font',
-        defaultsTo: 'poppins',
-        help: 'Google Font name for TextKit (fredoka, poppins, roboto, etc)',
       )
       ..addFlag('help', abbr: 'h', negatable: false, help: 'Show help');
   }
@@ -40,7 +34,6 @@ class InitCommand {
     }
 
     final filePath = results['file'] as String;
-    final font = results['font'] as String;
     final file = File(filePath);
 
     if (!file.existsSync()) {
@@ -48,7 +41,6 @@ class InitCommand {
     }
 
     log('📝 Reading file: $filePath');
-    log('🎨 Setting font: $font');
     String content = await file.readAsString();
 
     // If previously injected, clean it up first (idempotent).
@@ -57,13 +49,13 @@ class InitCommand {
       content = _removeExistingInjection(content);
     }
 
-    // Inject the new snippet with font configuration.
-    content = _injectCode(content, font);
+    // Inject the new snippet.
+    content = _injectCode(content);
 
     // Persist changes.
     await file.writeAsString(content);
     log('✅ Success: $filePath');
-    log('💡 TextKit is ready with $font font!');
+    log('💡 REST API initialization is ready!');
   }
 
   /// Removes the previously injected block delimited by [_startMarker] and
@@ -81,8 +73,8 @@ class InitCommand {
     return content;
   }
 
-  /// Injects the initialization snippet into [content] with the specified [font].
-  String _injectCode(String content, String font) {
+  /// Injects the REST API initialization snippet into [content].
+  String _injectCode(String content) {
     // Require an async main (this keeps dotenv usage safe).
     final mainPattern = RegExp(r'void\s+main\s*\(\s*\)\s+async\s*\{');
     final match = mainPattern.firstMatch(content);
@@ -90,12 +82,6 @@ class InitCommand {
     if (match == null) {
       throw Exception('"void main() async {" not found in the file.');
     }
-
-    // Sanitize font name: lowercase, remove special characters
-    final sanitizedFont = font.toLowerCase().replaceAll(
-      RegExp(r'[^a-z0-9]'),
-      '',
-    );
 
     // The snippet we inject (bounded by markers).
     final injectionCode =
@@ -107,9 +93,6 @@ class InitCommand {
   await dotenv.load(fileName: '.env');
   final base = dotenv.env['API_BASE_URL'];
   ApiClient.init(ApiConfig(baseUrl: base!));
-
-  // Configure TextKit font
-  TextKitConfig.setFont('$sanitizedFont');
   $_endMarker
 ''';
 
@@ -122,7 +105,7 @@ class InitCommand {
   /// Prints CLI help/usage for this command.
   void _printHelp() {
     log('''
-Initialize FlutterX starter kit by injecting initialization code to main.dart
+Initialize FlutterX REST API by injecting initialization code to main.dart
 
 Usage: flutterx init [options]
 
@@ -132,22 +115,18 @@ ${argParser.usage}
 Examples:
   flutterx init
   flutterx init --file lib/main.dart
-  flutterx init --file lib/main.dart --font fredoka
-  flutterx init -f lib/app.dart --font montserrat
-
-Available fonts:
-  poppins (default), fredoka, roboto, montserrat, opensans, 
-  lato, nunito, raleway, inter
+  flutterx init -f lib/app.dart
 
 What gets injected:
   - WidgetsFlutterBinding initialization
   - Environment variables loading (.env)
   - ApiClient configuration
-  - TextKit font configuration
 
 Requirements:
   - Your main() must be async: void main() async { }
-  - Dependencies: flutter_dotenv, google_fonts
+  - Dependencies: flutter_dotenv
+
+Note: For font configuration, use 'flutterx font' command
 ''');
   }
 }
