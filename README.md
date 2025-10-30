@@ -12,7 +12,7 @@ A comprehensive starter kit that accelerates Flutter app development with ready-
 
 - **CLI Helpers** - Generate your project fast code fast deploy
 - **ApiClient** - Powerful HTTP client with complete features
-- **UI Components** - Widget library (TextKit)
+- **UI Components** - Widget library (TextKit, ButtonKit, SnackbarKit)
 
 ### Coming Soon
 
@@ -36,7 +36,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutterx_starter_kit: 0.0.5
+  flutterx_starter_kit: 0.0.6
 ```
 
 Or install via command line:
@@ -103,7 +103,7 @@ flutterx font
 flutterx font --name montserrat
 
 // short syntax
-flutterx font -name nunito
+flutterx font -n nunito
 ```
 
 ### ApiClient Usage
@@ -166,8 +166,6 @@ Exception for HTTP errors (4xx, 5xx).
 - `data` (dynamic) - Response body
 
 ```dart
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-
 // GET request
 final response = await ApiClient.instance.get('/users');
 print(response.data); // parsed JSON response
@@ -185,48 +183,39 @@ final updated = await ApiClient.instance.put('/users/1', {
 
 // DELETE request
 await ApiClient.instance.delete('/users/1');
-```
 
-Others Example
-
-```dart
-//example 1
-import 'package:flutter/material.dart';
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-
-String? accessToken = 'xxx123xxx123';
-
+// Global Authorization
 void main() {
   ApiClient.init(ApiConfig(
     baseUrl: 'https://jsonplaceholder.typicode.com',
-    tokenProvider: () async => accessToken, // Set global Authorization
+    tokenProvider: () async => 'xxxxxxxx', 
   ));
   runApp(MyApp());
 }
 
-//example 2
+// Skip headers
 final public = await ApiClient.instance.get('/v1/info',
-  opts: const ApiRequestOptions(skipAuth: true), // Skip headers
+  opts: const ApiRequestOptions(skipAuth: true), 
 );
 
-//example 3
+// Need others headers
 await ApiClient.instance.get(
   '/v1/public-info',
   opts: const ApiRequestOptions(
     skipAuth: true,
-    headers: {'X-Trace': 'abc123'}, // Need others headers
+    headers: {'X-Trace': 'abc123'}, 
   ),
 );
 
-//example 4
-ApiClient.init(ApiConfig(baseUrl: 'https://api.example.com'));
 // Not set global, need authorization
+ApiClient.init(ApiConfig(baseUrl: 'https://api.example.com'));
 final res1 = await ApiClient.instance.get(
   '/v1/secure-data',
   opts: const ApiRequestOptions(
     headers: {'Authorization': 'Bearer xxx123xxx123'}, // If not set global, add 'Bearer'
   ),
 );
+
 // Not set global, no needed authorization
 final res2 = await ApiClient.instance.get('/v1/public-info');
 ```
@@ -259,153 +248,64 @@ Quick Reference
 | `titleMedium`  |  16  |                 |                 |
 | `titleSmall`   |  14  |                 |                 |
 
-example
-
 ```dart
-import 'package:flutter/material.dart';
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+TextKit.displayLarge('Display Large'),
+TextKit.displayMedium('Display Medium'),
+TextKit.displaySmall('Display Small'),
+TextKit.headlineLarge('Headline Large'),
+TextKit.headlineMedium('Headline Medium'),
+TextKit.headlineSmall('Headline Small'),
+TextKit.titleLarge('Title Large'),
+TextKit.titleMedium('Title Medium'),
+TextKit.titleSmall('Title Small'),              
+TextKit.bodyLarge('Body Large'),
+TextKit.bodyMedium('Body Medium'),
+TextKit.bodySmall('Body Small'),
+TextKit.labelLarge('Label Large'),
+TextKit.labelMedium('Label Medium'),
+TextKit.labelSmall('Label Small'),
+               
+TextKit.bodyLarge(
+  'Very long text that might overflow...',
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+  color: Colors.blue,)
 
-class Fontkit extends StatelessWidget {
-  const Fontkit({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextKit.displayLarge('Display Large'),
-                    TextKit.displayMedium('Display Medium'),
-                    TextKit.displaySmall('Display Small'),
-                  ],
-                ),
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextKit.headlineLarge('Headline Large'),
-                    TextKit.headlineMedium('Headline Medium'),
-                    TextKit.headlineSmall('Headline Small'),
-                  ],
-                ),
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextKit.titleLarge('Title Large'),
-                    TextKit.titleMedium('Title Medium'),
-                    TextKit.titleSmall('Title Small'),
-                  ],
-                ),
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextKit.bodyLarge('Body Large'),
-                    TextKit.bodyMedium('Body Medium'),
-                    TextKit.bodySmall('Body Small'),
-                  ],
-                ),
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    TextKit.labelLarge('Label Large'),
-                    TextKit.labelMedium('Label Medium'),
-                    TextKit.labelSmall('Label Small'),
-                  ],
-                ),
-                SizedBox(height: 40),
-                TextKit.headlineMedium('Other examples'),
-                Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: TextKit.labelLarge('Button Text'),
-                    ),
-                    Chip(
-                      label: TextKit.labelMedium(
-                        'Chip Label',
-                        color: Colors.black,
-                      ),
-                    ),
-                    TextKit.bodyLarge(
-                      'Very long text that might overflow...',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.blue,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 ```
 
 ### ButtonKit Usage
 
 ![FlutterX FontKit](assets/buttonkit.png)
 
-example
+```dart
+ButtonKit(
+  text: "Sign In",
+  textColor: Colors.white,
+  bgColor: Colors.blue,
+  press: () {},
+  width: 200,
+  height: 50,
+),
+ButtonKitGradient(
+  text: "This is Gradient",
+  textColor: Colors.white,
+  bgColor1: Colors.cyan,
+  bgColor2: Colors.purpleAccent,
+  press: () {},
+  width: 200,
+),
+```
+
+### SnackbarKit Usage
+
+![FlutterX FontKit](assets/snacbarkit.png)
 
 ```dart
-import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
-
-class Fontkit extends StatelessWidget {
-  const Fontkit({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ButtonKit(
-                  text: "Sign In",
-                  textColor: Colors.white,
-                  bgColor: Colors.blue,
-                  press: () {},
-                  width: 200,
-                  height: 50,
-                ),
-                ButtonKitGradient(
-                  text: "This is Gradient",
-                  textColor: Colors.white,
-                  bgColor1: Colors.cyan,
-                  bgColor2: Colors.purpleAccent,
-                  press: () {},
-                  width: 200,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+SnackbarKit.success(context,'Profile updated!',);
+SnackbarKit.error(context,'Connection failed',);
+SnackbarKit.warning(context,'Low storage',);
+SnackbarKit.info(context,'New update available',);
+SnackbarKit.normal(context,'Settings saved',)
 ```
 
 ## Additional Information
