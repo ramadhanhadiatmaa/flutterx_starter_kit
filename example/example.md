@@ -169,3 +169,175 @@ class _SuratDetailPageState extends State<SuratDetailPage> {
 }
 
 ```
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+class Fontkit extends StatelessWidget {
+  const Fontkit({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.displayLarge('Display Large'),
+                    TextKit.displayMedium('Display Medium'),
+                    TextKit.displaySmall('Display Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.headlineLarge('Headline Large'),
+                    TextKit.headlineMedium('Headline Medium'),
+                    TextKit.headlineSmall('Headline Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.titleLarge('Title Large'),
+                    TextKit.titleMedium('Title Medium'),
+                    TextKit.titleSmall('Title Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.bodyLarge('Body Large'),
+                    TextKit.bodyMedium('Body Medium'),
+                    TextKit.bodySmall('Body Small'),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextKit.labelLarge('Label Large'),
+                    TextKit.labelMedium('Label Medium'),
+                    TextKit.labelSmall('Label Small'),
+                  ],
+                ),
+                SizedBox(height: 40),
+                TextKit.headlineMedium('Other examples'),
+                Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: TextKit.labelLarge('Button Text'),
+                    ),
+                    Chip(
+                      label: TextKit.labelMedium(
+                        'Chip Label',
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextKit.bodyLarge(
+                      'Very long text that might overflow...',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutterx_starter_kit/flutterx_starter_kit.dart';
+
+class ButtonClass extends StatelessWidget {
+  const ButtonClass({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ButtonKit(
+                  text: "Sign In",
+                  textColor: Colors.white,
+                  bgColor: Colors.blue,
+                  press: () {
+                    SnackbarKit.success(
+                      context,
+                      'Profile updated!',
+                      position: SnackbarPosition.bottom,
+                    );
+                    SnackbarKit.error(
+                      context,
+                      'Connection failed',
+                      position: SnackbarPosition.bottom,
+                    );
+                    SnackbarKit.warning(
+                      context,
+                      'Low storage',
+                      position: SnackbarPosition.bottom,
+                    );
+                    SnackbarKit.info(
+                      context,
+                      'New update available',
+                      position: SnackbarPosition.bottom,
+                    );
+                    SnackbarKit.normal(
+                      context,
+                      'Settings saved',
+                      position: SnackbarPosition.bottom,
+                    );
+                  },
+                  height: 50,
+                ),
+                ButtonKitGradient(
+                  text: "This is Gradient",
+                  textColor: Colors.white,
+                  bgColor1: Colors.cyan,
+                  bgColor2: Colors.purpleAccent,
+                  press: () {},
+                  width: 200,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```

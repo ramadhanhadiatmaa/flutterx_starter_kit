@@ -23,3 +23,7 @@
 * Add ButtonKit
 
 * Separate Font CLI into `flutterx font`
+
+## 0.0.6
+
+* Add Snacbarkit
